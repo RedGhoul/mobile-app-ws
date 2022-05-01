@@ -1,7 +1,6 @@
-package com.somethingsblog.app.ws.Repo;
+package com.somethingsblog.app.ws.io.repository;
 
 import com.somethingsblog.app.ws.io.entity.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
