@@ -4,6 +4,8 @@ import com.somethingsblog.app.ws.io.repository.UserRepository;
 import com.somethingsblog.app.ws.io.entity.UserEntity;
 import com.somethingsblog.app.ws.service.UserService;
 import com.somethingsblog.app.ws.shard.dto.UserDto;
+import com.somethingsblog.app.ws.ui.model.response.ErrorMessage;
+import com.somethingsblog.app.ws.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +23,8 @@ public class UserServiceImpl implements UserService {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, com.somethingsblog.app.ws.shard.utils utils, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           com.somethingsblog.app.ws.shard.utils utils, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.utils = utils;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -47,7 +50,29 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(String email) {
         UserDto returnValue = new UserDto();
         UserEntity storedUserDetails = userRepository.findUserEntityByEmail(email);
+        if(storedUserDetails == null) throw new UsernameNotFoundException(email);
         BeanUtils.copyProperties(storedUserDetails,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findUserEntityByUserId(userId);
+        if(userEntity == null) throw new UsernameNotFoundException(userId);
+        BeanUtils.copyProperties(userEntity,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String id, UserDto userDto) throws Exception {
+        UserEntity storedUser = userRepository.findUserEntityByUserId(id);
+        if(storedUser == null) throw new UsernameNotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        storedUser.setFirstName(userDto.getFirstName().isBlank() ? storedUser.getFirstName() : userDto.getFirstName());
+        storedUser.setLastName(userDto.getLastName().isBlank() ? storedUser.getLastName() : userDto.getLastName());
+        storedUser = userRepository.save(storedUser);
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(storedUser,returnValue);
         return returnValue;
     }
 

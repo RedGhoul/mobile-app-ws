@@ -1,9 +1,12 @@
 package com.somethingsblog.app.ws.ui.controller;
 
+import com.somethingsblog.app.ws.exceptions.UserServiceException;
 import com.somethingsblog.app.ws.service.UserService;
 import com.somethingsblog.app.ws.shard.dto.UserDto;
 import com.somethingsblog.app.ws.ui.model.request.UserDetailsRequestModel;
+import com.somethingsblog.app.ws.ui.model.response.ErrorMessages;
 import com.somethingsblog.app.ws.ui.model.response.UserRest;
+import org.apache.tomcat.jni.Error;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +20,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String getUser(){
-        return "Get user was called";
+    @GetMapping("/{id}")
+    public UserRest getUser(@PathVariable String id){
+        UserRest returnValue = new UserRest();
+        UserDto userDto = userService.getUserByUserId(id);
+        BeanUtils.copyProperties(userDto,returnValue);
+        return returnValue;
     }
 
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
+        if(userDetails.getFirstName().isBlank()) throw new UserServiceException(
+                ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails,userDto);
         UserDto createdUser = userService.createUser(userDto);
@@ -32,9 +40,16 @@ public class UserController {
         return returnValue;
     }
 
-    @PutMapping
-    public String updateUser(){
-        return "Update user was called";
+    @PutMapping(path="/{id}")
+    public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) throws Exception {
+        UserRest returnValue = new UserRest();
+        if(userDetails.getFirstName().isBlank()) throw new UserServiceException(
+                ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails,userDto);
+        UserDto updatedUser = userService.updateUser(id,userDto);
+        BeanUtils.copyProperties(updatedUser,returnValue);
+        return returnValue;
     }
 
     @DeleteMapping
