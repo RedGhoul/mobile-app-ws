@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>mobile-app-ws</name>
     <description>mobile-app-ws</description>
+    <packaging>jar</packaging>
     <properties>
         <java.version>17</java.version>
     </properties>

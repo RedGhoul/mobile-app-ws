@@ -1,10 +1,14 @@
 jwttoken: jj99homes
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/mobileappws
-    username: root2
+    url: jdbc:mysql://162.0.234.178:3999/mobileappws
+    username: root
     password: Basappa123)
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:h2:mem:dcbapp
+  #    driver-class-name: org.h2.Driver
+  #    username: sa
+  #    password: pass
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
