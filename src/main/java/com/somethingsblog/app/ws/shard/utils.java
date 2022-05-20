@@ -11,6 +11,10 @@ public class utils {
     public String generateUserId() {
         return generateRandomString(20);
     }
+
+    public String generateAddressId() {
+        return generateRandomString(20);
+    }
     public String generateUserId(int length) {
         return generateRandomString(length);
     }
