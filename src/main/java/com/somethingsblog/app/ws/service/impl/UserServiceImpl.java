@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new ModelMapper().map(userDto,UserEntity.class);
         for(AddressEntity entity: userEntity.getAddresses()){
             entity.setAddressId(utils.generateUserId());
+            entity.setUserDetails(userEntity);
         }
         userEntity.setEncryptedPassword(
                 bCryptPasswordEncoder.encode(userDto.getPassword()));
