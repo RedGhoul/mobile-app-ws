@@ -9,6 +9,8 @@ import com.somethingsblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.somethingsblog.app.ws.ui.model.response.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -88,7 +90,23 @@ public class UserController {
         AddressRest returnValue = new AddressRest();
         AddressDto addressDto = addressesService.getAddressByUserId(userId, addressId);
         if(addressDto != null){
-            return new ModelMapper().map(addressDto, AddressRest.class);
+            returnValue = new ModelMapper().map(addressDto, AddressRest.class);
+            Link userLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                    .slash(userId)
+                    .withRel("user");
+            Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                    .slash(userId)
+                    .slash("addresses")
+                    .withRel("addresses");
+            Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                    .slash(userId)
+                    .slash("addresses")
+                    .slash(addressId)
+                    .withSelfRel();
+            returnValue.add(userLink);
+            returnValue.add(selfLink);
+            returnValue.add(userAddressesLink);
+            return returnValue;
         }
         return returnValue;
     }
