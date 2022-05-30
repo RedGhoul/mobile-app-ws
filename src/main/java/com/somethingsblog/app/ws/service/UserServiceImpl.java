@@ -1,4 +1,4 @@
-package com.somethingsblog.app.ws.service.impl;
+package com.somethingsblog.app.ws.service;
 
 import com.somethingsblog.app.ws.exceptions.UserServiceException;
 import com.somethingsblog.app.ws.io.entity.AddressEntity;
