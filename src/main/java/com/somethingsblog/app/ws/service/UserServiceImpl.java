@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         if(storedUserDetails != null) throw new Exception("User Already Exists");
         UserEntity userEntity = new ModelMapper().map(userDto,UserEntity.class);
         for(AddressEntity entity: userEntity.getAddresses()){
-            entity.setAddressId(utils.generateUserId());
+            entity.setAddressId(utils.generateAddressId());
             entity.setUserDetails(userEntity);
         }
         userEntity.setEncryptedPassword(

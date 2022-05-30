@@ -1,45 +1,51 @@
-package com.somethingsblog.app.ws.service;
+package com.somethingsblog.app.ws.ui.controller;
 
 import com.somethingsblog.app.ws.io.entity.AddressEntity;
 import com.somethingsblog.app.ws.io.entity.UserEntity;
 import com.somethingsblog.app.ws.io.repository.UserRepository;
+import com.somethingsblog.app.ws.service.AddressesService;
+import com.somethingsblog.app.ws.service.UserService;
+import com.somethingsblog.app.ws.service.UserServiceImpl;
 import com.somethingsblog.app.ws.shard.dto.AddressDto;
 import com.somethingsblog.app.ws.shard.dto.UserDto;
 import com.somethingsblog.app.ws.shard.utils;
+import com.somethingsblog.app.ws.ui.model.response.UserRest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
-class UserServiceImplTest {
-
-    // creates a new instance and injects the required classes that have
-    // already been mocked
+class UserControllerTest {
     @InjectMocks
-    UserServiceImpl userService;
+    UserController userController;
 
     @Mock
-    UserRepository userRepository;
+    UserService userService;
+
+    @Mock
+    AddressesService addressesService;
+
     @Mock
     utils utils;
 
     @Mock
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    UserDto userDto;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        userDto = createUserDto();
     }
 
     @AfterEach
@@ -48,46 +54,31 @@ class UserServiceImplTest {
 
     @Test
     void getUser() {
-        UserEntity userEntity = createUserEntity();
-        when(userRepository.findUserEntityByEmail(anyString())).thenReturn(userEntity);
-        UserDto userDto = userService.getUser("test@test.com");
-        assertNotNull(userDto);
-        assertEquals("Momo", userDto.getFirstName());
+        when(userService.getUserByUserId(userDto.getUserId())).thenReturn(userDto);
+        UserRest userRest = userController.getUser(userDto.getUserId());
+        assertNotNull(userRest);
+        assertEquals(userDto.getFirstName(), userRest.getFirstName());
+        assertEquals(userDto.getUserId(), userRest.getUserId());
     }
 
     @Test
-    void getUserThrowsExceptionIfEmailAddressNotFound() {
-        when(userRepository.findUserEntityByEmail(anyString())).thenReturn(null);
-        assertThrows(UsernameNotFoundException.class, ()->{
-            userService.getUser("test@test.com");
-        });
+    void getUsers() {
     }
 
     @Test
-    void createUserThrowsExceptionIfUserAlreadyExists() {
-        UserEntity user = createUserEntity();
-        when(userRepository.findUserEntityByEmail(anyString())).thenReturn(user);
-        Exception thrownException = assertThrows(Exception.class, ()->{
-            userService.createUser(createUserDto());
-        });
-        assertEquals("User Already Exists", thrownException.getMessage());
+    void createUser() {
     }
 
     @Test
-    void createUser() throws Exception {
-        UserEntity user = createUserEntity();
-        UserDto userDto = createUserDto();
-        when(userRepository.findUserEntityByEmail(anyString())).thenReturn(null);
-        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
-        when(utils.generateAddressId(anyInt())).thenReturn("asdfasdfa");
-        when(utils.generateUserId(anyInt())).thenReturn("asdfasdf123a");
-        when(bCryptPasswordEncoder.encode(anyString())).thenReturn("asdfasdf123a");
-        UserDto newUser = userService.createUser(userDto);
-        assertNotNull(newUser);
-        assertEquals(userDto.getUserId(), newUser.getUserId());
-        verify(bCryptPasswordEncoder, times(1)).encode(userDto.getPassword());
-        // you can use doNothing().when() if you don't want a service or another object to
-        // do something when called in the test
+    void updateUser() {
+    }
+
+    @Test
+    void deleteUser() {
+    }
+
+    @Test
+    void getUserAddresses() {
     }
 
     private UserEntity createUserEntity() {
