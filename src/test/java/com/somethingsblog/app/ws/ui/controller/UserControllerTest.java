@@ -2,13 +2,11 @@ package com.somethingsblog.app.ws.ui.controller;
 
 import com.somethingsblog.app.ws.io.entity.AddressEntity;
 import com.somethingsblog.app.ws.io.entity.UserEntity;
-import com.somethingsblog.app.ws.io.repository.UserRepository;
 import com.somethingsblog.app.ws.service.AddressesService;
 import com.somethingsblog.app.ws.service.UserService;
-import com.somethingsblog.app.ws.service.UserServiceImpl;
-import com.somethingsblog.app.ws.shard.dto.AddressDto;
-import com.somethingsblog.app.ws.shard.dto.UserDto;
-import com.somethingsblog.app.ws.shard.utils;
+import com.somethingsblog.app.ws.shared.dto.AddressDto;
+import com.somethingsblog.app.ws.shared.dto.UserDto;
+import com.somethingsblog.app.ws.shared.Utils;
 import com.somethingsblog.app.ws.ui.model.response.UserRest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class UserControllerTest {
@@ -35,7 +32,7 @@ class UserControllerTest {
     AddressesService addressesService;
 
     @Mock
-    utils utils;
+    Utils utils;
 
     @Mock
     BCryptPasswordEncoder bCryptPasswordEncoder;

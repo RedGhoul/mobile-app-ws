@@ -3,7 +3,7 @@ package com.somethingsblog.app.ws.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somethingsblog.app.ws.SpringApplicationContext;
 import com.somethingsblog.app.ws.service.UserService;
-import com.somethingsblog.app.ws.shard.dto.UserDto;
+import com.somethingsblog.app.ws.shared.dto.UserDto;
 import com.somethingsblog.app.ws.ui.model.request.UserLoginRequestModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -4,11 +4,12 @@ import com.somethingsblog.app.ws.exceptions.UserServiceException;
 import com.somethingsblog.app.ws.io.entity.AddressEntity;
 import com.somethingsblog.app.ws.io.repository.UserRepository;
 import com.somethingsblog.app.ws.io.entity.UserEntity;
-import com.somethingsblog.app.ws.service.UserService;
-import com.somethingsblog.app.ws.shard.dto.UserDto;
+import com.somethingsblog.app.ws.shared.Utils;
+import com.somethingsblog.app.ws.shared.dto.UserDto;
 import com.somethingsblog.app.ws.ui.model.response.ErrorMessages;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,12 +26,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final com.somethingsblog.app.ws.shard.utils utils;
+    private final Utils utils;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
-                           com.somethingsblog.app.ws.shard.utils utils, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                           Utils utils, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.utils = utils;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -57,7 +58,13 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(String email) {
         UserEntity storedUserDetails = userRepository.findUserEntityByEmail(email);
         if(storedUserDetails == null) throw new UsernameNotFoundException(email);
-        return new ModelMapper().map(storedUserDetails, UserDto.class);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(UserEntity.class, UserDto.class).addMappings(mapper -> {
+            mapper.skip(UserEntity::getAddresses,
+                    UserDto::setAddresses);
+        });
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        return modelMapper.map(storedUserDetails, UserDto.class);
     }
 
     @Override

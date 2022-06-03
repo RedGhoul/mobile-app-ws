@@ -1,4 +1,4 @@
-package com.somethingsblog.app.ws.shard.dto;
+package com.somethingsblog.app.ws.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

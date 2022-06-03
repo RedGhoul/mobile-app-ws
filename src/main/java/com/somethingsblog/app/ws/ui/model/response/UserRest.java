@@ -1,15 +1,13 @@
 package com.somethingsblog.app.ws.ui.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class UserRest {
     private String userId;
     private String firstName;

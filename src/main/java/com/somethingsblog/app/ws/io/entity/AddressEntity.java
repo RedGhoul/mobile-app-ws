@@ -1,9 +1,9 @@
 package com.somethingsblog.app.ws.io.entity;
 
-import com.somethingsblog.app.ws.shard.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Entity(name = "addresses")
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class AddressEntity implements Serializable {
 
     @Id

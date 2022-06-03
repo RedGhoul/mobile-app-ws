@@ -3,9 +3,9 @@ package com.somethingsblog.app.ws.service;
 import com.somethingsblog.app.ws.io.entity.AddressEntity;
 import com.somethingsblog.app.ws.io.entity.UserEntity;
 import com.somethingsblog.app.ws.io.repository.UserRepository;
-import com.somethingsblog.app.ws.shard.dto.AddressDto;
-import com.somethingsblog.app.ws.shard.dto.UserDto;
-import com.somethingsblog.app.ws.shard.utils;
+import com.somethingsblog.app.ws.shared.dto.AddressDto;
+import com.somethingsblog.app.ws.shared.dto.UserDto;
+import com.somethingsblog.app.ws.shared.Utils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
     @Mock
-    utils utils;
+    Utils utils;
 
     @Mock
     BCryptPasswordEncoder bCryptPasswordEncoder;

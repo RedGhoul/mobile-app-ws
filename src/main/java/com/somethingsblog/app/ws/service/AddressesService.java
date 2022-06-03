@@ -1,6 +1,6 @@
 package com.somethingsblog.app.ws.service;
 
-import com.somethingsblog.app.ws.shard.dto.AddressDto;
+import com.somethingsblog.app.ws.shared.dto.AddressDto;
 
 import java.util.List;
 
