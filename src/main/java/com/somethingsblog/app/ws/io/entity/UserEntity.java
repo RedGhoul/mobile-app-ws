@@ -33,6 +33,5 @@ public class UserEntity implements Serializable {
     private Boolean emailVerificationStatus = false;
 
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
-
     private List<AddressEntity> addresses;
 }

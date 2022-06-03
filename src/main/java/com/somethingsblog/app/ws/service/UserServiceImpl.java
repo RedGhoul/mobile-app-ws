@@ -56,15 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(String email) {
-        UserEntity storedUserDetails = userRepository.findUserEntityByEmail(email);
+        UserEntity storedUserDetails = userRepository.findUserEntityByEmailWithAddresses(email);
         if(storedUserDetails == null) throw new UsernameNotFoundException(email);
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.typeMap(UserEntity.class, UserDto.class).addMappings(mapper -> {
-            mapper.skip(UserEntity::getAddresses,
-                    UserDto::setAddresses);
-        });
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-        return modelMapper.map(storedUserDetails, UserDto.class);
+        return new ModelMapper().map(storedUserDetails, UserDto.class);
     }
 
     @Override
